@@ -12,17 +12,19 @@ BASE_URL = 'https://coag.gov/resources/formal-ag-opinions'
 HEADERS = ['date', 'ag', 'title', 'pdf_link', 'description']
 
 
-def get_max_page(html):
+def get_max_page():
     '''get the last page number from the CO AG opinion search results page'''
 
+    r = requests.get(BASE_URL)
+
     # soup the HTML
-    soup = BeautifulSoup(html, 'html.parser')
+    soup = BeautifulSoup(r.text, 'html.parser')
 
     # find the nav element with the last page number
     lastpage = soup.find('li', class_='next') \
                    .previous_sibling.previous_sibling \
                    .text
-    
+
     # return it but as a number
     return int(lastpage)
 
@@ -31,9 +33,6 @@ def extract_data(html):
     '''given the html of a page of CO AG opinions, extract the bits of data
     and return in a list of dicts'''
 
-    # fetch the page
-    r = requests.get(BASE_URL)
-    
     # soup the page
     soup = BeautifulSoup(html, 'html.parser')
 
@@ -76,7 +75,8 @@ def extract_data(html):
     # return entries parsed in a list comp
     return [parse_entry(x) for x in entries]
 
-# grab the last page
+
+# get max page
 lastpage = get_max_page()
 
 # open a CSV to write out to
