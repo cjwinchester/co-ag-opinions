@@ -80,7 +80,7 @@ def extract_data(html):
 lastpage = get_max_page()
 
 # open a CSV to write out to
-with open('ag-opinions.csv', 'w') as outfile:
+with open('co-ag-opinions.csv', 'w') as outfile:
 
     # create a writer object
     writer = csv.DictWriter(outfile, fieldnames=HEADERS)
